@@ -1,4 +1,4 @@
-/**import EventForm from "@/components/shared/EventForm"
+import EventForm from "@/components/shared/EventForm"
 import { getEventById } from "@/lib/actions/event.actions"
 import { auth } from "@clerk/nextjs/server";
 
@@ -32,4 +32,4 @@ const UpdateEvent = async ({ params: { id } }: UpdateEventProps) => {
   )
 }
 
-export default UpdateEvent*/
+export default UpdateEvent
