@@ -1,4 +1,4 @@
-/*import { Webhook } from 'svix'
+import { Webhook } from 'svix'
 import { headers } from 'next/headers'
 import { WebhookEvent } from '@clerk/nextjs/server'
 import { createUser, deleteUser, updateUser } from '@/lib/actions/user.actions'
@@ -14,11 +14,13 @@ export async function POST(req: Request) {
     throw new Error('Please add WEBHOOK_SECRET from Clerk Dashboard to .env or .env.local')
   }
  
-  // Get the headers
-  const headerPayload = headers();
-  const svix_id = headerPayload.get("svix-id");
-  const svix_timestamp = headerPayload.get("svix-timestamp");
-  const svix_signature = headerPayload.get("svix-signature");
+ // ✅ Use 'await' to resolve the promise
+const headerPayload = await headers();
+
+const svix_id = headerPayload.get("svix-id");
+const svix_timestamp = headerPayload.get("svix-timestamp");
+const svix_signature = headerPayload.get("svix-signature");
+
  
   // If there are no headers, error out
   if (!svix_id || !svix_timestamp || !svix_signature) {
@@ -68,13 +70,15 @@ export async function POST(req: Request) {
 
     const newUser = await createUser(user);
 
-    if(newUser) {
-      await clerkClient.users.updateUserMetadata(id, {
-        publicMetadata: {
-          userId: newUser._id
-        }
-      })
-    }
+
+    // ✅ Await clerkClient before accessing `.users`
+    const clerk = await clerkClient();
+    await clerk.users.updateUserMetadata(id, {
+      publicMetadata: {
+        userId: newUser._id
+      }
+    });
+
 
     return NextResponse.json({ message: 'OK', user: newUser })
   }
@@ -103,5 +107,5 @@ export async function POST(req: Request) {
   }
  
   return new Response('', { status: 200 })
-}*/
+}
  
