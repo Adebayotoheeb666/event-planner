@@ -7,10 +7,16 @@ import { SearchParamProps } from '@/types';
 import Image from 'next/image';
 import Link from 'next/link';
 
+type EventPageProps = {
+  params: {
+    id: string;
+  };
+};
+
 export default async function Home({ searchParams }: SearchParamProps) {
-  const page = await Number(searchParams?.page) || 1;
-  const searchText = await (searchParams?.query as string) || '';
-  const category = await (searchParams?.category as string) || '';
+  const page = Number(searchParams?.page) || 1;
+  const searchText = (searchParams?.query as string) || '';
+  const category = (searchParams?.category as string) || '';
 
   const events = await getAllEvents({
     query: searchText,
